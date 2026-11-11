@@ -1,0 +1,147 @@
+.how__timeline {
+  position: relative;
+  padding-left: 0;
+}
+
+.how__steps {
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+}
+
+.how__step {
+  display: grid;
+  grid-template-columns: 64px 1fr;
+  gap: 28px;
+  align-items: start;
+}
+
+/* rail runs through the centre of the node column */
+.how__rail {
+  position: absolute;
+  left: 31px;
+  top: 24px;
+  bottom: 24px;
+  width: 1px;
+  background: var(--line);
+}
+
+.how__rail-fill {
+  position: absolute;
+  inset: 0;
+  background: var(--amber);
+  transform: scaleY(0);
+}
+
+.how__node {
+  position: relative;
+  z-index: 1;
+  width: 64px;
+  height: 64px;
+  display: grid;
+  place-items: center;
+  background: #fff;
+  border: 1px solid var(--line-2);
+  border-radius: var(--r);
+  box-shadow: var(--shadow-sm);
+}
+
+.how__node-num {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--amber);
+}
+
+.how__card {
+  padding: 30px 32px;
+}
+
+.how__card-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+.how__card-icon {
+  display: grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  border: 1px solid var(--line-amber);
+  border-radius: var(--r);
+  background: var(--ink-2);
+  color: var(--amber);
+}
+
+.how__card-meta {
+  font-size: 0.66rem;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--bone-3);
+}
+
+.how__card h3 {
+  font-size: 1.4rem;
+  margin-bottom: 12px;
+}
+
+.how__card p {
+  color: var(--bone-2);
+  font-size: 0.98rem;
+  max-width: 54ch;
+}
+
+.how__points {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.how__points li {
+  position: relative;
+  padding-left: 18px;
+}
+
+.how__points li::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0.55em;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--amber);
+}
+
+.how__points strong {
+  display: block;
+  margin-bottom: 4px;
+  font-size: 0.98rem;
+  font-weight: 600;
+  color: var(--bone);
+}
+
+@media (max-width: 640px) {
+  .how__step {
+    grid-template-columns: 48px 1fr;
+    gap: 18px;
+  }
+  .how__rail {
+    left: 23px;
+  }
+  .how__node {
+    width: 48px;
+    height: 48px;
+  }
+  .how__node-num {
+    font-size: 0.9rem;
+  }
+  .how__card {
+    padding: 24px 22px;
+  }
+}

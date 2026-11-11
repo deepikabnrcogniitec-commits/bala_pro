@@ -1,0 +1,13 @@
+{
+  "artboards": [
+    { "file": "Main.dc.html", "x": 0, "y": 0, "w": 390, "h": 1820, "title": "Home — Taste in Motion" },
+    { "file": "DirectionWarm.dc.html", "x": 520, "y": 0, "w": 390, "h": 1220, "title": "Alt A · Warm editorial" },
+    { "file": "DirectionBold.dc.html", "x": 1040, "y": 0, "w": 390, "h": 1180, "title": "Alt B · Bold brutalist" }
+  ],
+  "annotations": [
+    { "id": "note-main", "x": 0, "y": -112, "w": 390, "text": "THE DIRECTION — dark immersive burgundy + gold, glass panels, and the 3D \"Taste in Motion\" reel (looping food clips). This is the full home screen and matches the coded redesign." },
+    { "id": "note-warm", "x": 520, "y": -112, "w": 390, "text": "ALT A · Warm editorial — cream paper, Newsreader serif headlines, a single feature + a calm list. Understated, premium, restful." },
+    { "id": "note-bold", "x": 1040, "y": -112, "w": 390, "text": "ALT B · Bold brutalist — hard grid, oversized Unbounded type, magenta/gold on near-black, ranked 01/02/03 list. High energy, nightlife-discovery feel." }
+  ],
+  "launch": { "view": "canvas" }
+}

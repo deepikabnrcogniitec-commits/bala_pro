@@ -1,0 +1,163 @@
+.restaurants__head {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 24px;
+  margin-bottom: 48px;
+}
+
+/* restaurant-name ticker, full-bleed between the heading and the cards */
+.restaurants__marquee {
+  margin: 0 calc(50% - 50vw) 48px;
+}
+
+.restaurants__arrows {
+  display: flex;
+  gap: 8px;
+  flex: none;
+}
+
+.restaurants__arrows button {
+  width: 44px;
+  height: 44px;
+  display: grid;
+  place-items: center;
+  border: 1px solid var(--line-2);
+  border-radius: var(--r);
+  color: var(--bone-2);
+  transition: border-color 0.25s var(--ease), color 0.25s var(--ease);
+}
+
+.restaurants__arrows button:hover {
+  border-color: var(--amber);
+  color: var(--amber);
+}
+
+.restaurants__arrow--left {
+  transform: rotate(180deg);
+}
+
+.restaurants__track {
+  display: flex;
+  gap: 14px;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  padding-bottom: 14px;
+  margin: 0 calc(var(--pad-x) * -1);
+  padding-inline: var(--pad-x);
+  scrollbar-width: none;
+}
+
+.restaurants__track::-webkit-scrollbar {
+  display: none;
+}
+
+.rcard {
+  flex: 0 0 320px;
+  scroll-snap-align: start;
+  overflow: hidden;
+  transition: border-color 0.3s var(--ease), transform 0.3s var(--ease);
+}
+
+.rcard:hover {
+  border-color: var(--line-amber);
+  transform: translateY(-3px);
+}
+
+.rcard__media {
+  position: relative;
+  height: 168px;
+  background: var(--ink-2);
+  border-bottom: 1px solid var(--line);
+}
+
+.rcard__media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.6s var(--ease);
+}
+
+.rcard:hover .rcard__media img {
+  transform: scale(1.04);
+}
+
+.rcard__offer {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 9px;
+  background: #fff;
+  border: 1px solid var(--line-amber);
+  border-radius: var(--r);
+  font-size: 0.62rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--amber);
+  box-shadow: var(--shadow-sm);
+}
+
+.rcard__body {
+  padding: 22px 22px 24px;
+}
+
+.rcard__row {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.rcard__row h3 {
+  font-size: 1.15rem;
+}
+
+.rcard__rating {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 0.78rem;
+  color: var(--gold);
+}
+
+.rcard__cuisine {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 8px;
+  font-size: 0.72rem;
+  color: var(--bone-3);
+}
+
+.rcard__cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 20px;
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--bone-2);
+  transition: color 0.25s var(--ease), gap 0.25s var(--ease);
+}
+
+.rcard__cta:hover {
+  color: var(--amber);
+  gap: 12px;
+}
+
+@media (max-width: 640px) {
+  .restaurants__head {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .rcard {
+    flex-basis: 280px;
+  }
+}

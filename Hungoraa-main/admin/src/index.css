@@ -1,0 +1,45 @@
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: Inter, -apple-system, sans-serif;
+  min-height: 100vh;
+  background:
+    radial-gradient(1100px 700px at 12% -10%, rgba(249, 169, 27, 0.16), transparent 60%),
+    radial-gradient(1000px 700px at 112% 8%, rgba(31, 82, 122, 0.4), transparent 55%),
+    radial-gradient(900px 650px at 50% 115%, rgba(12, 47, 78, 0.55), transparent 60%),
+    linear-gradient(160deg, #0b2a48 0%, #071c30 45%, #04101d 100%);
+  background-attachment: fixed;
+  background-repeat: no-repeat;
+}
+
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: rgba(148, 178, 209, 0.35); border-radius: 3px; }
+
+/* Glassy chrome — frosted header/sidebar over the gradient body so content
+   scrolling behind them shows through blurred. */
+.mantine-AppShell-header,
+.mantine-AppShell-navbar {
+  background: rgba(12, 47, 78, 0.4);
+  border-color: rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(20px) saturate(140%);
+  -webkit-backdrop-filter: blur(20px) saturate(140%);
+}
+
+.mantine-AppShell-main {
+  background: transparent;
+}
+
+/* Glass surfaces for cards/papers/menus/modals (all Paper-based in Mantine v7) */
+.mantine-Paper-root,
+.mantine-Card-root {
+  background: rgba(255, 255, 255, 0.045) !important;
+  backdrop-filter: blur(16px) saturate(130%);
+  -webkit-backdrop-filter: blur(16px) saturate(130%);
+  border: 1px solid rgba(255, 255, 255, 0.09);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.28);
+}
+
+.mantine-Table-table {
+  background: transparent;
+}

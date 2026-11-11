@@ -1,0 +1,97 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Unbounded:wght@600;800&family=Space+Grotesk:wght@400;500;700&display=swap">
+  <style>
+    * { box-sizing: border-box; }
+    body { margin: 0; font-family: 'Space Grotesk', system-ui, sans-serif; background: #0A0006; }
+    a { color: #FFD91A; } a:hover { color: #fff; }
+    .display { font-family: 'Unbounded', 'Space Grotesk', Impact, sans-serif; }
+  </style>
+</helmet>
+
+<div style="width: 390px; min-height: 920px; background: #0A0006; color: #fff; font-family: 'Space Grotesk', system-ui, sans-serif;">
+
+  <!-- header band -->
+  <div style="border-bottom: 2px solid #FF3D6F; padding: 20px; display: flex; justify-content: space-between; align-items: center;">
+    <div class="display" style="font-size: 15px; font-weight: 800; color: #FFD91A; letter-spacing: -0.5px;">HUNGORA</div>
+    <div style="font-size: 11px; color: #9A8A92; letter-spacing: 1px;">NEYYOOR ▾</div>
+  </div>
+
+  <!-- monster headline -->
+  <div style="padding: 24px 20px 0;">
+    <div class="display" style="font-size: 46px; line-height: 0.92; font-weight: 800; letter-spacing: -1.5px; color: #fff;">
+      EAT<br>
+      <span style="color: #FF3D6F;">OUT</span><br>
+      TO<span style="color: #FFD91A;">NIGHT</span>
+    </div>
+  </div>
+
+  <!-- search block -->
+  <div style="margin: 22px 20px 0; border: 2px solid #fff; padding: 14px 16px; display: flex; justify-content: space-between; align-items: center;">
+    <span style="font-size: 14px; color: #9A8A92;">SEARCH / DISH / CUISINE</span>
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#FFD91A" stroke-width="2.4"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
+  </div>
+
+  <!-- tabs as hard blocks -->
+  <div style="display: flex; margin: 16px 20px 0; border: 2px solid #fff;">
+    <div style="flex: 1; padding: 12px; text-align: center; background: #FFD91A; color: #0A0006; font-weight: 700; font-size: 13px;">DINE OUT</div>
+    <div style="flex: 1; padding: 12px; text-align: center; border-left: 2px solid #fff; font-size: 13px; color: #9A8A92;">PAY BILL</div>
+    <div style="flex: 1; padding: 12px; text-align: center; border-left: 2px solid #fff; font-size: 13px; color: #9A8A92;">EVENTS</div>
+  </div>
+
+  <!-- TASTE IN MOTION full-bleed -->
+  <div style="margin-top: 24px; border-top: 2px solid #FF3D6F; border-bottom: 2px solid #FF3D6F; position: relative;">
+    <div style="position: absolute; top: 10px; left: 14px; z-index: 2; font-size: 10px; letter-spacing: 2px; color: #FFD91A; font-weight: 700;">TASTE IN MOTION — 01/05</div>
+    <img src="reel-biryani.jpg" alt="" style="width: 100%; height: 320px; object-fit: cover; display: block; filter: contrast(1.08) saturate(1.1);">
+    <div style="position: absolute; inset: 0; background: linear-gradient(180deg, rgba(10,0,6,0.35), transparent 30%, rgba(10,0,6,0.9));"></div>
+    <div style="position: absolute; left: 14px; right: 14px; bottom: 14px; z-index: 2;">
+      <div class="display" style="font-size: 22px; font-weight: 800; letter-spacing: -0.5px;">BAWARCHI BIRYANI HOUSE</div>
+      <div style="display: flex; gap: 10px; margin-top: 8px; font-size: 12px; color: #E7B8D2;">
+        <span style="background: #FF3D6F; color: #fff; padding: 3px 7px; font-weight: 700;">★ 4.6</span>
+        <span style="align-self: center;">1.2 KM · ₹800 / 2</span>
+      </div>
+      <div style="margin-top: 12px; background: #FFD91A; color: #0A0006; text-align: center; padding: 13px; font-weight: 800; font-size: 14px; letter-spacing: 0.5px;">BOOK A TABLE →</div>
+    </div>
+  </div>
+
+  <!-- ranked list -->
+  <div style="padding: 22px 20px 30px;">
+    <div class="display" style="font-size: 16px; font-weight: 800; margin-bottom: 6px;">TOP RATED / NEYYOOR</div>
+
+    <div style="display: flex; align-items: center; gap: 14px; padding: 16px 0; border-top: 1px solid #2A1A22;">
+      <div class="display" style="font-size: 26px; color: #FF3D6F; font-weight: 800; width: 34px;">01</div>
+      <div style="flex: 1;">
+        <div style="font-size: 15px; font-weight: 700;">Classique Cafe</div>
+        <div style="font-size: 11px; color: #9A8A92; margin-top: 2px;">BIRYANI · 10–15 MIN · 60% OFF</div>
+      </div>
+      <div style="font-size: 13px; color: #FFD91A; font-weight: 700;">4.1</div>
+    </div>
+    <div style="display: flex; align-items: center; gap: 14px; padding: 16px 0; border-top: 1px solid #2A1A22;">
+      <div class="display" style="font-size: 26px; color: #FF3D6F; font-weight: 800; width: 34px;">02</div>
+      <div style="flex: 1;">
+        <div style="font-size: 15px; font-weight: 700;">Platez Restaurant</div>
+        <div style="font-size: 11px; color: #9A8A92; margin-top: 2px;">NORTH INDIAN · 20–25 MIN · 50% OFF</div>
+      </div>
+      <div style="font-size: 13px; color: #FFD91A; font-weight: 700;">4.5</div>
+    </div>
+    <div style="display: flex; align-items: center; gap: 14px; padding: 16px 0; border-top: 1px solid #2A1A22;">
+      <div class="display" style="font-size: 26px; color: #FF3D6F; font-weight: 800; width: 34px;">03</div>
+      <div style="flex: 1;">
+        <div style="font-size: 15px; font-weight: 700;">Sotto Wood-Fire Pizza</div>
+        <div style="font-size: 11px; color: #9A8A92; margin-top: 2px;">ITALIAN · 0.6 KM · CHEF'S TABLE</div>
+      </div>
+      <div style="font-size: 13px; color: #FFD91A; font-weight: 700;">4.8</div>
+    </div>
+  </div>
+
+</div>
+</x-dc>
+</body>
+</html>

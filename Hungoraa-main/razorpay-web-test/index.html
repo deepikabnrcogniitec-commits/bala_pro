@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Hungora - Razorpay TEST MODE backend check</title>
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+<style>
+  body { font-family: system-ui, "Segoe UI", Arial, sans-serif; max-width: 880px; margin: 24px auto; padding: 0 16px; color: #1E1B18; background: #FBF7F1; }
+  h1 { font-size: 20px; margin-bottom: 4px; }
+  fieldset { background: #fff; border: 1px solid #EAE2D6; border-radius: 10px; margin: 14px 0; padding: 12px 14px; }
+  legend { font-weight: 700; padding: 0 6px; }
+  label { display: block; font-size: 12px; color: #6F6862; margin-top: 8px; }
+  input { width: 100%; padding: 8px; box-sizing: border-box; margin-top: 2px; border: 1px solid #D8CFC3; border-radius: 6px; }
+  .row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  button { margin: 10px 8px 0 0; padding: 9px 14px; border: 0; border-radius: 8px; background: #0C2F4E; color: #fff; cursor: pointer; }
+  button.secondary { background: #6F6862; }
+  button:disabled { opacity: .5; cursor: default; }
+  .warn { background: #FFF4D6; padding: 10px 12px; border-radius: 8px; font-size: 13px; }
+  pre { background: #1E1B18; color: #E8E2D9; padding: 12px; border-radius: 8px; max-height: 420px; overflow: auto; font-size: 12px; white-space: pre-wrap; }
+  code { background: #EFE8DC; padding: 1px 4px; border-radius: 4px; font-size: 12px; }
+</style>
+</head>
+<body>
+<h1>Razorpay TEST MODE - backend integration check</h1>
+<p class="warn">
+  Uses the Razorpay <b>test</b> keys stored in the backend. No real money moves.
+  Test card: <code>4111 1111 1111 1111</code>, any future expiry, any CVV. If Razorpay asks for an OTP, use the test OTP it shows (commonly <code>1234</code>).
+</p>
+
+<fieldset>
+  <legend>1. Settings</legend>
+  <div class="row">
+    <div>
+      <label>Backend API base URL</label>
+      <input id="apiBase" value="http://localhost:5000/api" />
+    </div>
+    <div>
+      <label>Customer email (role must be customer)</label>
+      <input id="email" type="email" placeholder="customer@example.com" />
+    </div>
+  </div>
+  <div class="row">
+    <div>
+      <label>Customer password</label>
+      <input id="password" type="password" />
+    </div>
+    <div>
+      <label>Restaurant ID (status approved or active; find with mongosh)</label>
+      <input id="restaurantId" placeholder="24-char Mongo _id" />
+    </div>
+  </div>
+  <button id="btnLogin">Step A: Login</button>
+</fieldset>
+
+<fieldset>
+  <legend>2. Hold a table (creates a booking in status "held")</legend>
+  <div class="row">
+    <div>
+      <label>Date (YYYY-MM-DD)</label>
+      <input id="date" />
+    </div>
+    <div>
+      <label>Time (e.g. 7:30 PM)</label>
+      <input id="time" value="7:30 PM" />
+    </div>
+  </div>
+  <div class="row">
+    <div>
+      <label>Guests</label>
+      <input id="guests" type="number" min="1" value="2" />
+    </div>
+    <div>
+      <label>Deposit amount in rupees (auto-filled from hold; enter manually if 0)</label>
+      <input id="amount" type="number" min="1" step="1" />
+    </div>
+  </div>
+  <button id="btnHold">Step B: Hold table</button>
+</fieldset>
+
+<fieldset>
+  <legend>3. Pay (create order, open Razorpay test checkout, verify on backend)</legend>
+  <button id="btnPay">Step C: Create order and pay</button>
+  <button id="btnBadSig" class="secondary">Negative test: verify with fake signature</button>
+  <button id="btnDbHelp" class="secondary">Show mongosh checks</button>
+</fieldset>
+
+<fieldset>
+  <legend>Log</legend>
+  <pre id="log">Ready. Run Step A, then B, then C.</pre>
+</fieldset>
+
+<script>
+  const $ = (id) => document.getElementById(id);
+  const state = { token: null, bookingId: null, orderId: null, paymentId: null };
+
+  // Default date: tomorrow (local time)
+  (function setDefaultDate() {
+    const d = new Date(Date.now() + 24 * 60 * 60 * 1000);
+    const pad = (n) => String(n).padStart(2, '0');
+    $('date').value = `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;
+  })();
+
+  function log(title, data) {
+    const time = new Date().toLocaleTimeString();
+    let text = `\n[${time}] ${title}`;
+    if (data !== undefined) {
+      text += '\n' + (typeof data === 'string' ? data : JSON.stringify(data, null, 2));
+    }
+    $('log').textContent += text + '\n';
+    $('log').scrollTop = $('log').scrollHeight;
+  }
+
+  async function api(method, path, body, useAuth = true) {
+    const headers = { 'Content-Type': 'application/json' };
+    if (useAuth && state.token) headers.Authorization = `Bearer ${state.token}`;
+    const base = $('apiBase').value.replace(/\/+$/, '');
+    const res = await fetch(base + path, {
+      method,
+      headers,
+      body: body ? JSON.stringify(body) : undefined,
+    });
+    const json = await res.json().catch(() => ({}));
+    if (!res.ok) {
+      const err = new Error(json.message || json.error || `HTTP ${res.status}`);
+      err.status = res.status;
+      err.body = json;
+      throw err;
+    }
+    return json;
+  }
+
+  function run(fn) {
+    return async () => {
+      try {
+        await fn();
+      } catch (e) {
+        log(`ERROR (${e.status || 'network'})`, e.body || e.message);
+      }
+    };
+  }
+
+  // Step A: login as a customer
+  $('btnLogin').onclick = run(async () => {
+    const r = await api('POST', '/auth/login', {
+      email: $('email').value.trim(),
+      password: $('password').value,
+    }, false);
+    state.token = r.data.accessToken;
+    log('Login OK', { email: r.data.user?.email, role: r.data.user?.role, token: state.token.slice(0, 12) + '...' });
+  });
+
+  // Step B: hold a table
+  $('btnHold').onclick = run(async () => {
+    if (!state.token) throw new Error('Login first (Step A)');
+    const r = await api('POST', '/bookings/hold', {
+      restaurantId: $('restaurantId').value.trim(),
+      date: $('date').value,
+      time: $('time').value.trim(),
+      guests: Number($('guests').value),
+      paymentMethod: 'razorpay',
+      bookingSource: 'web',
+    });
+    state.bookingId = r.data.booking._id;
+    if (!$('amount').value && r.data.depositAmount) {
+      $('amount').value = r.data.depositAmount;
+    }
+    log('Hold OK', {
+      bookingId: state.bookingId,
+      status: r.data.booking.status,
+      holdExpiresAt: r.data.holdExpiresAt,
+      requiresDeposit: r.data.requiresDeposit,
+      depositAmount: r.data.depositAmount,
+    });
+    if (!$('amount').value) log('Enter a deposit amount in rupees (restaurant has no deposit configured).');
+  });
+
+  // Step C: create order -> checkout -> backend verify
+  $('btnPay').onclick = run(async () => {
+    if (!state.token) throw new Error('Login first (Step A)');
+    if (!state.bookingId) throw new Error('Hold a table first (Step B)');
+    const amount = Number($('amount').value);
+    if (!amount || amount <= 0) throw new Error('Enter a deposit amount in rupees');
+
+    const created = await api('POST', '/payments/create-order', {
+      bookingId: state.bookingId,
+      amount,
+      type: 'deposit',
+    });
+    const o = created.data;
+    state.orderId = o.orderId;
+    log('Create order OK (amounts are in paise)', o);
+
+    const rzp = new Razorpay({
+      key: o.key,
+      amount: o.amount,
+      currency: o.currency,
+      order_id: o.orderId,
+      name: 'Hungora (test)',
+      description: 'Booking deposit - test mode',
+      handler: async (resp) => {
+        log('Razorpay checkout returned success (not trusted until backend verifies)', resp);
+        state.paymentId = resp.razorpay_payment_id;
+        try {
+          const v = await api('POST', '/payments/verify', {
+            razorpayOrderId: resp.razorpay_order_id,
+            razorpayPaymentId: resp.razorpay_payment_id,
+            razorpaySignature: resp.razorpay_signature,
+            bookingId: state.bookingId,
+          });
+          log('Backend verification OK', v);
+          showDbHelp();
+        } catch (e) {
+          log(`Backend verification FAILED (HTTP ${e.status || 'network'})`, e.body || e.message);
+        }
+      },
+      modal: {
+        ondismiss: () => log('Checkout closed by user (cancelled, no payment captured)'),
+      },
+    });
+    rzp.on('payment.failed', (r) => log('Razorpay reported payment FAILED', r.error));
+    rzp.open();
+  });
+
+  // Negative test: a fake signature must be rejected by the backend
+  $('btnBadSig').onclick = run(async () => {
+    if (!state.token || !state.orderId || !state.bookingId) {
+      throw new Error('Run Steps A, B and C first so an order exists');
+    }
+    try {
+      await api('POST', '/payments/verify', {
+        razorpayOrderId: state.orderId,
+        razorpayPaymentId: 'pay_fake_negative_test',
+        razorpaySignature: '0'.repeat(64),
+        bookingId: state.bookingId,
+      });
+      log('UNEXPECTED: backend accepted a fake signature');
+    } catch (e) {
+      log(`Expected rejection (HTTP ${e.status})`, e.body || e.message);
+    }
+  });
+
+  function showDbHelp() {
+    const b = state.bookingId || '<bookingId>';
+    const o = state.orderId || '<orderId>';
+    log('Check the database (run in mongosh)', [
+      `use dinesmart`,
+      `db.payments.find({ razorpayOrderId: "${o}" }).pretty()`,
+      `db.bookings.findOne({ _id: ObjectId("${b}") }, { isPaid: 1, status: 1, holdStatus: 1, payment: 1 })`,
+      `Expected: payment.status = "completed", booking.isPaid = true, booking.status = "pending"`,
+    ].join('\n'));
+  }
+
+  $('btnDbHelp').onclick = () => showDbHelp();
+</script>
+</body>
+</html>

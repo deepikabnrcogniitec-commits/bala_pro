@@ -1,0 +1,182 @@
+.hero {
+  position: relative;
+  isolation: isolate;
+  display: flex;
+  align-items: center;
+  min-height: 100vh;
+  min-height: 100svh;
+  overflow: clip;
+}
+
+.hero__inner {
+  width: 100%;
+  max-width: var(--maxw);
+  margin: 0 auto;
+  padding: 130px var(--pad-x) 90px;
+}
+
+.hero__copy {
+  max-width: 800px;
+  color: #fff;
+  /* --hp = px scrolled inside the hero (set from Hero.tsx): text drifts up and fades */
+  transform: translate3d(0, calc(var(--hp, 0) * -0.28px), 0);
+  opacity: calc(1 - var(--hp, 0) / 620);
+  will-change: transform, opacity;
+}
+
+.hero__title {
+  font-size: clamp(2.1rem, 5.6vw, 4.9rem);
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: -0.035em;
+  text-transform: uppercase;
+  color: #fff;
+  text-shadow: 0 2px 24px rgba(0, 0, 0, 0.35);
+}
+
+.hero__title .line {
+  display: block;
+  white-space: nowrap;
+  min-height: 1em;
+}
+
+/* not-yet-typed letters keep their space so the layout never jumps */
+.hero__ghost {
+  visibility: hidden;
+}
+
+.hero__caret {
+  display: inline-block;
+  width: 0.06em;
+  height: 0.82em;
+  margin-left: 0.05em;
+  margin-right: -0.11em;
+  vertical-align: -0.05em;
+  background: var(--mark-gold);
+  border-radius: 2px;
+  animation: hero-caret 0.9s steps(1) infinite;
+}
+
+@keyframes hero-caret {
+  0%,
+  49% {
+    opacity: 1;
+  }
+  50%,
+  100% {
+    opacity: 0;
+  }
+}
+
+.hero__title-accent {
+  background: linear-gradient(100deg, #ffd98a 0%, #f9a91b 55%, #f28a1a 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+  text-shadow: none;
+  filter: drop-shadow(0 4px 18px rgba(249, 169, 27, 0.35));
+}
+
+.hero__subtitle {
+  margin-top: 26px;
+  font-size: 1.15rem;
+  line-height: 1.6;
+  color: rgba(255, 255, 255, 0.88);
+  text-shadow: 0 1px 12px rgba(0, 0, 0, 0.4);
+}
+
+.hero__actions {
+  margin-top: 36px;
+  display: flex;
+  gap: 14px;
+  flex-wrap: wrap;
+}
+
+.hero__actions .btn {
+  padding: 17px 32px;
+  border-radius: 999px;
+}
+
+.hero__actions .btn-primary {
+  background: linear-gradient(100deg, #ffc857 0%, #f9a91b 60%, #f28a1a 100%);
+  color: #0c2f4e;
+  box-shadow: 0 16px 34px -12px rgba(249, 169, 27, 0.7);
+}
+
+.hero__actions .btn-primary:hover {
+  background: linear-gradient(100deg, #ffd98a 0%, #ffb830 60%, #f9a91b 100%);
+  box-shadow: 0 22px 42px -12px rgba(249, 169, 27, 0.85);
+}
+
+.hero__btn-outline {
+  color: #fff;
+  border: 1px solid rgba(255, 255, 255, 0.7);
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+}
+
+.hero__btn-outline:hover {
+  background: rgba(255, 255, 255, 0.22);
+  border-color: #fff;
+  transform: translateY(-2px);
+}
+
+/* ---------- full-width background photo ---------- */
+.hero__bg {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  overflow: hidden;
+  background: var(--bone);
+  /* parallax: the photo lags behind the page and slowly zooms */
+  transform: translate3d(0, calc(var(--hp, 0) * 0.4px), 0) scale(calc(1 + var(--hp, 0) * 0.00025));
+  will-change: transform;
+}
+
+.hero__banner {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: 62% center;
+  /* fades in once loaded — the URL comes from admin settings (useHeroBanner) */
+  opacity: 0;
+  transform: scale(1.05);
+  transition: opacity 1.4s cubic-bezier(0.215, 0.61, 0.355, 1), transform 1.4s cubic-bezier(0.215, 0.61, 0.355, 1);
+}
+
+.hero__banner.is-loaded {
+  opacity: 1;
+  transform: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero__banner {
+    transition: none;
+  }
+}
+
+/* soft dark fade on the left so the white copy stays readable */
+.hero__bg::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    90deg,
+    rgba(6, 22, 40, 0.72) 0%,
+    rgba(6, 22, 40, 0.42) 40%,
+    rgba(6, 22, 40, 0) 72%
+  );
+}
+
+@media (max-width: 980px) {
+  .hero__inner {
+    padding-top: 140px;
+  }
+  .hero__bg::after {
+    background: rgba(6, 22, 40, 0.5);
+  }
+}

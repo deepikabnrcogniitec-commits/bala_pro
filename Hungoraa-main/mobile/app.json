@@ -1,0 +1,65 @@
+{
+  "expo": {
+    "name": "Hungora",
+    "slug": "hungora",
+    "version": "1.1.16",
+    "sdkVersion": "54.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/hungora_darkgreen_gold_logo.png",
+    "userInterfaceStyle": "light",
+    "splash": {
+      "image": "./assets/splash.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#0c2f4e"
+    },
+    "assetBundlePatterns": [
+      "**/*"
+    ],
+    "ios": {
+      "supportsTablet": false,
+      "bundleIdentifier": "com.hungora.app",
+      "infoPlist": {
+        "NSLocationWhenInUseUsageDescription": "Hungora needs your location to show nearby restaurants",
+        "NSCameraUsageDescription": "Hungora needs camera access for profile photos",
+        "NSPhotoLibraryUsageDescription": "Hungora needs photo library access"
+      }
+    },
+    "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/icon-foreground.png",
+        "backgroundColor": "#0C2F4E"
+      },
+      "package": "com.hungora.app",
+      "permissions": [
+        "ACCESS_FINE_LOCATION",
+        "ACCESS_COARSE_LOCATION",
+        "CAMERA",
+        "READ_EXTERNAL_STORAGE",
+        "WRITE_EXTERNAL_STORAGE"
+      ]
+    },
+    "plugins": [
+      "expo-font",
+      [
+        "expo-notifications",
+        {
+          "color": "#1B5E20"
+        }
+      ],
+      [
+        "expo-location",
+        {
+          "locationAlwaysAndWhenInUsePermission": "Allow Hungora to use your location."
+        }
+      ],
+      "@react-native-google-signin/google-signin",
+      "expo-video"
+    ],
+    "scheme": "hungora",
+    "extra": {
+      "eas": {
+        "projectId": "your-eas-project-id"
+      }
+    }
+  }
+}
